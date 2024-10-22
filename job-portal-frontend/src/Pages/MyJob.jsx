@@ -7,6 +7,9 @@ const MyJob = () => {
     const [searchText, setSearchtext] = useState("")
     const [isLoading, setIsLoading] = useState(true)
 
+    const [currentPage,setCurrentPage] = useState(1);
+    const itemPerPage = 5;
+
     useEffect(() => {
         setIsLoading(true)
         fetch("http://localhost:5000/myJobs/harsh@gmail.com").then(res => res.json()).then(data => {
@@ -14,6 +17,24 @@ const MyJob = () => {
         })
         setIsLoading(false)
     }, [isLoading])
+
+    //pagination 
+    const indexOfLastItem = currentPage* itemPerPage
+    const indexofFirstItem = indexOfLastItem - itemPerPage
+    const currentJobs = jobs.slice(indexofFirstItem,indexOfLastItem)
+
+    // next btn and previous btn
+    const nextPage = () => {
+        if(indexOfLastItem < jobs.length){
+            setCurrentPage(currentPage + 1)
+        }
+    }
+
+    const prevPage = () =>{
+        if (currentPage > 1){
+            setCurrentPage(currentPage -1)
+        }
+    }
 
     const handleSearch = () => {
 
@@ -89,7 +110,7 @@ const MyJob = () => {
                                 </thead>
                                 {
                                     isLoading ? (<div className='flex items-center justify-center h-20 '><p>loading ..... </p></div>) : (<tbody>
-                                        {jobs.map((job, index) =>
+                                        {currentJobs.map((job, index) =>
                                             <tr key={index}>
                                                 <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
                                                     {index + 1}
@@ -121,6 +142,21 @@ const MyJob = () => {
                         </div>
                     </div>
                 </div>
+
+
+                 {/* pagination  */}
+                 <div className='flex justify-center text-base text-black space-x-8 mb-8'>
+                        {
+                            currentPage > 1 && (<button onClick={prevPage} className='hover:underline'>Previous</button>)
+                        }
+                        {
+                            indexOfLastItem < jobs.length && (<button onClick={nextPage} className='hover:underline' >Next</button>)
+                        }
+
+                    </div>
+
+
+
                 <footer className="relative pt-8 pb-6 mt-16">
                     <div className="container mx-auto px-4">
                         <div className="flex flex-wrap items-center md:justify-between justify-center">
@@ -134,6 +170,7 @@ const MyJob = () => {
                             </div>
                         </div>
                     </div>
+                   
                 </footer>
             </section>
 

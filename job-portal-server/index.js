@@ -32,6 +32,8 @@ async function run() {
     const db = client.db('mernJobPortal')
     const jobsCollection = db.collection('demoJobs')
 
+ 
+
     //post a job 
     app.post("/post-job", async (req, res) => {
       const body = req.body;
@@ -55,10 +57,18 @@ async function run() {
       res.send(jobs)
     })
 
+    //get single job
+    app.get('/all-jobs/:id', async (req, res) => {
+      const id = req.params.id
+      const job = await jobsCollection.findOne({
+        _id: new ObjectId(id)
+      })
+      res.send(job)
+    })
+
     //delete a job
     app.delete('/job/:id', async (req, res) => {
       const id = req.params.id;
-      console.log("harsh")
       const filter = { _id: new ObjectId(id) }
       const results = await jobsCollection.deleteOne(filter)
       res.send(results)

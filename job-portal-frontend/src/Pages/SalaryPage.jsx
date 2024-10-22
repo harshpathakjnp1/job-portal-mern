@@ -7,7 +7,7 @@ const SalaryPage = () => {
 
     useEffect(()=>{
         fetch('salary.json').then(res=>res.json()).then(data=> setSalary(data))
-    },[])
+    },[searchText])
 
 
     const handleSearch = () => {
@@ -31,13 +31,14 @@ const SalaryPage = () => {
             </div>
 
             {/* {salary display}  */}
+            <div className='grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-12 my-12 items-center'>
             {
             salary.map((data)=>
             (
-                <div key={data.id}>
-                    <h4>{data.title}</h4>
-                    <p>{data.salary}</p>
-                    <div>
+                <div key={data.id} className='shad px-4 py-8 '>
+                    <h4 className='font-semibold text-xl'>{data.title}</h4>
+                    <p className='my-2 font-medium text-blue text-lg'>{data.salary}</p>
+                    <div className='flex flex-wrap gap-4 '>
                         <a href="/" className='underline'>
                         {data.status}
                         </a>
@@ -51,6 +52,7 @@ const SalaryPage = () => {
             )
             
             }
+            </div>
         </div>
     )
 }
