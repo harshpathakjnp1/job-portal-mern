@@ -32,7 +32,7 @@ async function run() {
     const db = client.db('mernJobPortal')
     const jobsCollection = db.collection('demoJobs')
 
- 
+
 
     //post a job 
     app.post("/post-job", async (req, res) => {
@@ -72,6 +72,21 @@ async function run() {
       const filter = { _id: new ObjectId(id) }
       const results = await jobsCollection.deleteOne(filter)
       res.send(results)
+    })
+
+    // UPDATE A JOB 
+    app.patch("/update-job/:id",async (req,res)=>{
+      const id = req.params.id
+      const jobData = req.body
+      const filter = {_id:new ObjectId(id)}
+      const options = {upsert :true}
+      const updateDoc = {
+        $set:{
+          ...jobData
+        },
+      };
+      const result = await jobsCollection.updateOne(filter,updateDoc,options)
+      res.send(result)
     })
 
     //get job by email
